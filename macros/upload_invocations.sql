@@ -4,6 +4,10 @@
 
 {% macro default__get_invocations_dml_sql() -%}
     {% set invocation_values %}
+
+    {% set adapterArr = ['databricks','spark','snowflake'] %}
+    {% if target.type in adapterArr %}
+
     select
         {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(1) }},
         {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(2) }},
@@ -23,6 +27,9 @@
         {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(16)) }},
         {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(17)) }}
     from values
+
+    {% endif %}
+
     (
         '{{ invocation_id }}', {# command_invocation_id #}
         '{{ dbt_version }}', {# dbt_version #}
@@ -30,6 +37,7 @@
         '{{ run_started_at }}', {# run_started_at #}
         '{{ flags.WHICH }}', {# dbt_command #}
         '{{ flags.FULL_REFRESH }}', {# full_refresh_flag #}
+        '{{ target.type }}', {# target_type #}
         '{{ target.profile_name }}', {# target_profile_name #}
         '{{ target.name }}', {# target_name #}
         '{{ target.schema }}', {# target_schema #}
@@ -75,6 +83,7 @@
         '{{ run_started_at }}', {# run_started_at #}
         '{{ flags.WHICH }}', {# dbt_command #}
         {{ flags.FULL_REFRESH }}, {# full_refresh_flag #}
+        '{{ target.type }}', {# target_type #}
         '{{ target.profile_name }}', {# target_profile_name #}
         '{{ target.name }}', {# target_name #}
         '{{ target.schema }}', {# target_schema #}

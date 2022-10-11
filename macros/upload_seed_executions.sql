@@ -11,6 +11,10 @@
 {% macro default__get_seed_executions_dml_sql(seeds) -%}
     {% if seeds != [] %}
         {% set seed_execution_values %}
+
+        {% set adapterArr = ['databricks','spark','snowflake'] %}
+        {% if target.type in adapterArr %}
+
         select
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(1) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(2) }},
@@ -26,6 +30,9 @@
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(12) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(13) }}
         from values
+
+        {% endif %}
+
         {% for model in seeds -%}
             (
                 '{{ invocation_id }}', {# command_invocation_id #}

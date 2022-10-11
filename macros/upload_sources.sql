@@ -10,6 +10,10 @@
 
     {% if sources != [] %}
         {% set source_values %}
+
+        {% set adapterArr = ['databricks','spark','snowflake'] %}
+        {% if target.type in adapterArr %}
+
         select
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(1) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(2) }},
@@ -23,6 +27,9 @@
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(10) }},
             {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(11)) }}
         from values
+
+        {% endif %}
+
         {% for source in sources -%}
             (
                 '{{ invocation_id }}', {# command_invocation_id #}

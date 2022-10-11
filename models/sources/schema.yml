@@ -1,0 +1,54 @@
+version: 2
+
+models:
+  - name: columns
+    meta:
+      label: Columns
+    columns:
+      - name: command_invocation_id
+        description: ''
+        meta:
+          label: Command Invocation Id
+      - name: node_id
+        description: ''
+        meta:
+          label: Node Id
+      - name: column_name
+        description: ''
+        meta:
+          label: Column Name
+      - name: data_type
+        description: ''
+        meta:
+          label: Data Type
+      - name: tags
+        description: ''
+        meta:
+          label: Tags
+      - name: meta
+        description: ''
+        meta:
+          label: Meta
+
+metrics:
+  - name: table_count
+    label: Table Count
+    model: ref('models')
+    description: "A `distinct_count` of tables"
+    type: count_distinct
+    sql: node_id
+    filters:
+      - field: materialization
+        operator: '!='
+        value: 'view'
+        
+  - name: view_count
+    label: View Count
+    model: ref('models')
+    description: "A `distinct_count` of views"
+    type: count_distinct
+    sql: node_id
+    filters:
+      - field: materialization
+        operator: 'is'
+        value: 'view'

@@ -11,6 +11,10 @@
 {% macro default__get_test_executions_dml_sql(tests) -%}
     {% if tests != [] %}
         {% set test_execution_values %}
+
+        {% set adapterArr = ['databricks','spark','snowflake'] %}
+        {% if target.type in adapterArr %}
+
         select
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(1) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(2) }},
@@ -24,6 +28,9 @@
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(10) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(11) }}
         from values
+
+        {% endif %}
+
         {% for test in tests -%}
             (
                 '{{ invocation_id }}', {# command_invocation_id #}

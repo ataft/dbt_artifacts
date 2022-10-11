@@ -109,6 +109,17 @@
             )
         }}
 
+        {% do log("Uploading model columns", true) %}
+        {% set models = dbt_artifacts.get_relation('columns') %}
+        {% set content_columns = dbt_artifacts.upload_columns(graph) %}
+        {{ dbt_artifacts.insert_into_metadata_table(
+            database_name=models.database,
+            schema_name=models.schema,
+            table_name=models.identifier,
+            content=content_columns
+            )
+        }}
+
         {% do log("Uploading sources", true) %}
         {% set sources = dbt_artifacts.get_relation('sources') %}
         {% set content_sources = dbt_artifacts.upload_sources(graph) %}
