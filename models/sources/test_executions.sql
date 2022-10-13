@@ -15,5 +15,7 @@ select
     cast(null as {{ type_float() }}) as total_node_runtime,
     cast(null as {{ type_int() }}) as rows_affected,
     cast(null as {{ type_int() }}) as failures
+    , cast(null as {{ type_string() }}) as test_meta_name
+    , cast(null as {{ type_json() }}) as test_meta_kwargs
 from dummy_cte
 where 1 = 0
