@@ -43,3 +43,39 @@
 {% macro bigquery__type_array() %}
    ARRAY<string>
 {% endmacro %}
+
+{#- Redshift -#}
+
+{% macro redshift__type_string() %}
+   varchar(256)
+{% endmacro %}
+
+{% macro redshift__type_json() %}
+   varchar(max)
+{% endmacro %}
+
+{% macro redshift__type_array() %}
+   varchar(max)
+{% endmacro %}
+
+{#- Long String -#}
+
+{%- macro type_longstring() -%}
+  {{ return(adapter.dispatch('type_longstring', 'dbt_artifacts')()) }}
+{%- endmacro -%}
+
+{% macro default__type_longstring() %}
+    string
+{% endmacro %}
+
+{%- macro redshift__type_longstring() -%}
+    varchar(max)
+{%- endmacro -%}
+
+{% macro postgres__type_longstring() %}
+    varchar(max)
+{% endmacro %}
+
+{% macro snowflake__type_longstring() %}
+    varchar
+{% endmacro %}

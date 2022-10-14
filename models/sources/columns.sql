@@ -4,11 +4,13 @@ with dummy_cte as (
 )
 
 select
-    cast(null as {{ type_string() }}) as command_invocation_id,
-    cast(null as {{ type_string() }}) as node_id,
-    cast(null as {{ type_string() }}) as column_name,
-    cast(null as {{ type_string() }}) as data_type,
-    cast(null as {{ type_array() }}) as tags,
-    cast(null as {{ type_json() }}) as meta
+    cast(null as {{ type_string() }}) as command_invocation_id
+    , cast(null as {{ type_string() }}) as node_id
+    , cast(null as {{ type_string() }}) as column_name
+    , cast(null as {{ type_string() }}) as data_type
+    , cast(null as {{ type_array() }}) as tags
+    , cast(null as {{ type_json() }}) as meta
+    , cast(null as {{ type_longstring() }}) as description
+    , cast(null as {{ type_string() }}) as is_documented
 from dummy_cte
 where 1 = 0

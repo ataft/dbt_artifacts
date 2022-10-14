@@ -33,14 +33,19 @@
         {% endfor %}
 
         {% for model in new_list -%}
-            {% for key, value in model.columns.items() %}
+            {% set relation = dbt_artifacts.get_relation( model.name ) %}
+            {%- set columns = adapter.get_columns_in_relation(relation) -%}
+            {% for column in columns %}
+                {% set col = model.columns.get(column.name) %}
                 (
-                    '{{ invocation_id }}', {# command_invocation_id #}
-                    '{{ model.unique_id }}', {# node_id #}
-                    '{{ key }}', {# column_name #}
-                    '{{ value.data_type }}', {# data_type #}
-                    '{{ tojson(value.tags) }}', {# tags #}
-                    '{{ tojson(value.meta) }}' {# meta #}
+                    '{{ invocation_id }}' {# command_invocation_id #}
+                    , '{{ model.unique_id }}' {# node_id #}
+                    , '{{ column.name }}' {# column_name #}
+                    , '{{ column.data_type }}' {# data_type #}
+                    , '{{ null if col.tags is not defined else tojson(col.tags) }}' {# tags #}
+                    , '{{ null if col.meta is not defined else tojson(col.meta) }}' {# meta #}
+                    , '{{ null if col.description is not defined else col.description | replace("'","\\'") }}' {# description #}
+                    , '{{ "N" if col.name is not defined else "Y" }}' {# is_documented #}
                 )
                 {%- if not loop.last %},{%- endif %}
             {% endfor %}
