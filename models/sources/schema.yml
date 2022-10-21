@@ -37,6 +37,7 @@ metrics:
     description: "A `distinct_count` of tables"
     type: count_distinct
     sql: node_id
+    timestamp: run_started_at
     filters:
       - field: materialization
         operator: '!='
@@ -48,6 +49,7 @@ metrics:
     description: "A `distinct_count` of views"
     type: count_distinct
     sql: node_id
+    timestamp: run_started_at
     filters:
       - field: materialization
         operator: 'is'

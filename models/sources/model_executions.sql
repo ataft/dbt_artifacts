@@ -16,7 +16,7 @@ select
     cast(null as {{ type_int() }}) as rows_affected,
     cast(null as {{ type_int() }}) as bytes_processed,
     cast(null as {{ type_string() }}) as materialization,
-    cast(null as {{ type_string() }}) as schema,
+    cast(null as {{ type_string() }}) as schema_name,
     cast(null as {{ type_string() }}) as name,
     cast(null as {{ type_int() }}) as total_rowcount
 from dummy_cte

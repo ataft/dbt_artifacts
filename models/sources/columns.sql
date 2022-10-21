@@ -10,7 +10,7 @@ select
     , cast(null as {{ type_string() }}) as data_type
     , cast(null as {{ type_array() }}) as tags
     , cast(null as {{ type_json() }}) as meta
-    , cast(null as {{ type_longstring() }}) as description
+    , cast(null as {{ type_string() }}) as description
     , cast(null as {{ type_string() }}) as is_documented
     , cast(null as {{ type_int() }}) as row_count
     , cast(null as {{ type_int() }}) as row_distinct
