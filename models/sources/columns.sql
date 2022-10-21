@@ -12,5 +12,13 @@ select
     , cast(null as {{ type_json() }}) as meta
     , cast(null as {{ type_longstring() }}) as description
     , cast(null as {{ type_string() }}) as is_documented
+    , cast(null as {{ type_int() }}) as row_count
+    , cast(null as {{ type_int() }}) as row_distinct
+    , cast(null as {{ type_int() }}) as row_null
+    , cast(null as {{ type_float() }}) as row_min
+    , cast(null as {{ type_float() }}) as row_max
+    , cast(null as {{ type_float() }}) as row_avg
+    , cast(null as {{ type_float() }}) as row_sum
+    , cast(null as {{ type_float() }}) as row_stdev
 from dummy_cte
 where 1 = 0
