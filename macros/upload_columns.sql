@@ -20,7 +20,17 @@
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(3) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(4) }},
             {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(5)) }},
-            {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(6)) }}
+            {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(6)) }},
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(7) }},
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(8) }},
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(9) }},
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(10) }},
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(11) }},
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(12) }},
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(13) }},
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(14) }},
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(15) }},
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(16) }}
         from values
 
         {% endif %}
@@ -78,9 +88,14 @@
                     , '{{ model.unique_id }}' {# node_id #}
                     , '{{ column.name }}' {# column_name #}
                     , '{{ column.data_type }}' {# data_type #}
+                    {% if target.type == 'bigquery' %}
+                    , {{ '[]' if col.tags is not defined else tojson(col.tags) }} {# tags #}
+                    , parse_json('{{ '{}' if col.meta is not defined else tojson(col.meta) }}') {# meta #}
+                    {% else %}
                     , '{{ null if col.tags is not defined else tojson(col.tags) }}' {# tags #}
                     , '{{ null if col.meta is not defined else tojson(col.meta) }}' {# meta #}
-                    , '{{ null if col.description is not defined else col.description | replace("'","''") }}' {# description #}
+                    {% endif %}
+                    , '{{ null if col.description is not defined else adapter.dispatch('escape_singlequote', 'dbt_artifacts')(col.description) }}' {# description #}
                     , '{{ "N" if col.name is not defined else "Y" }}' {# is_documented #}
                     {% if results is none %}
                     , null

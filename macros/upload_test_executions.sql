@@ -71,7 +71,7 @@
                 null, {# rows_affected not available in Databricks #}
                 {{ 'null' if test.failures is none else test.failures }} {# failures #}
                 , '{{ null if test.node.test_metadata is not defined else test.node.test_metadata.name }}' {# test_meta_name #}
-                , '{{ null if test.node.test_metadata is not defined else tojson(test.node.test_metadata.kwargs) | replace("'","\\'") }}' {# test_meta_kwargs #}
+                , '{{ null if test.node.test_metadata is not defined else tojson(adapter.dispatch('escape_singlequote', 'dbt_artifacts')(test.node.test_metadata.kwargs)) }}' {# test_meta_kwargs #}
             )
             {%- if not loop.last %},{%- endif %}
         {%- endfor %}
@@ -124,8 +124,8 @@
                 {{ test.execution_time }}, {# total_node_runtime #}
                 null, {# rows_affected not available in Databricks #}
                 {{ 'null' if test.failures is none else test.failures }} {# failures #}
-                , {{ 'null' if test.test_metadata is not defined else test.test_metadata.name }} {# test_meta_name #}
-                , {{ 'null' if test.test_metadata is not defined else test.test_metadata.kwargs }} {# test_meta_kwargs #}
+                , '{{ null if test.node.test_metadata is not defined else test.node.test_metadata.name }}' {# test_meta_name #}
+                , '{{ null if test.node.test_metadata is not defined else tojson(adapter.dispatch('escape_singlequote', 'dbt_artifacts')(test.node.test_metadata.kwargs)) }}' {# test_meta_kwargs #}                
             )
             {%- if not loop.last %},{%- endif %}
 

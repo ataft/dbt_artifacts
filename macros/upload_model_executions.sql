@@ -40,7 +40,7 @@
         {% for model in models -%}
 
             {%- set rowcount_query %}
-            select count(*) as "model_rowcount" from {{ model.node.schema }}.{{ model.node.name }}
+            select count(*) as model_rowcount from {{ model.node.schema }}.{{ model.node.name }}
             {%- endset -%}
             {%- set results = run_query(rowcount_query) -%}
             {%- set model_rowcount = results.columns[0].values()[0] -%}

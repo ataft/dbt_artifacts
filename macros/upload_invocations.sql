@@ -82,7 +82,7 @@
         '{{ project_name }}', {# project_name #}
         '{{ run_started_at }}', {# run_started_at #}
         '{{ flags.WHICH }}', {# dbt_command #}
-        {{ flags.FULL_REFRESH }}, {# full_refresh_flag #}
+        '{{ flags.FULL_REFRESH }}', {# full_refresh_flag #}
         '{{ target.type }}', {# target_type #}
         '{{ target.profile_name }}', {# target_profile_name #}
         '{{ target.name }}', {# target_name #}

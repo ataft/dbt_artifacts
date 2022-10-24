@@ -41,8 +41,8 @@
                 '{{ source.loader }}', {# loader #}
                 '{{ source.name }}', {# name #}
                 '{{ source.identifier }}', {# identifier #}
-                '{{ source.loaded_at_field | replace("'","\\'") }}', {# loaded_at_field #}
-                '{{ tojson(source.freshness) | replace("'","\\'") }}' {# freshness #}
+                '{{ adapter.dispatch('escape_singlequote', 'dbt_artifacts')(source.loaded_at_field) }}', {# loaded_at_field #}
+                '{{ tojson(adapter.dispatch('escape_singlequote', 'dbt_artifacts')(source.freshness)) }}' {# freshness #}
             )
             {%- if not loop.last %},{%- endif %}
         {%- endfor %}
@@ -67,8 +67,8 @@
                     '{{ source.loader }}', {# loader #}
                     '{{ source.name }}', {# name #}
                     '{{ source.identifier }}', {# identifier #}
-                    '{{ source.loaded_at_field | replace("'","\\'") }}', {# loaded_at_field #}
-                    parse_json('{{ tojson(source.freshness) | replace("'","\\'") }}')  {# freshness #}
+                    '{{ adapter.dispatch('escape_singlequote', 'dbt_artifacts')(source.loaded_at_field) }}', {# loaded_at_field #}
+                    parse_json('{{ tojson(source.freshness) }}')  {# freshness #}
                 )
                 {%- if not loop.last %},{%- endif %}
             {%- endfor %}
