@@ -50,7 +50,11 @@
                 , max({{ column.name }}) as {{ column.name }}_max
                 , avg({{ column.name }}) as {{ column.name }}_avg
                 , sum({{ column.name }}) as {{ column.name }}_sum
+                {% if target.type == 'sqlserver' %}
+                , stdev({{ column.name }}) as {{ column.name }}_stdev
+                {% else %}
                 , stddev({{ column.name }}) as {{ column.name }}_stdev
+                {% endif %}
                 {% else %}
                 , null as {{ column.name }}_min
                 , null as {{ column.name }}_max
@@ -76,7 +80,7 @@
                     , '{{ column.data_type }}' {# data_type #}
                     , '{{ null if col.tags is not defined else tojson(col.tags) }}' {# tags #}
                     , '{{ null if col.meta is not defined else tojson(col.meta) }}' {# meta #}
-                    , '{{ null if col.description is not defined else col.description | replace("'","\\'") }}' {# description #}
+                    , '{{ null if col.description is not defined else col.description | replace("'","''") }}' {# description #}
                     , '{{ "N" if col.name is not defined else "Y" }}' {# is_documented #}
                     {% if results is none %}
                     , null

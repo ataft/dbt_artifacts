@@ -57,3 +57,7 @@
 {% macro redshift__type_array() %}
    varchar(max)
 {% endmacro %}
+
+{% macro sqlserver__type_timestamp() %}
+   datetime
+{% endmacro %}
