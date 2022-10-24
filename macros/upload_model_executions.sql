@@ -54,7 +54,7 @@
             {% if config_full_refresh is none %}
                 {% set config_full_refresh = flags.FULL_REFRESH %}
             {% endif %}
-            {{ config_full_refresh }}, {# was_full_refresh #}
+            '{{ config_full_refresh }}', {# was_full_refresh #}
 
             '{{ model.thread_id }}', {# thread_id #}
             '{{ model.status }}', {# status #}
