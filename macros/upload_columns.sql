@@ -106,6 +106,15 @@
                     , null
                     , null
                     , null
+                    {% elif target.type == 'snowflake' %}
+                    , {{ results.columns['ROW_COUNT'].values()[0] or 0 }} {# row_count #}
+                    , {{ results.columns[column.name ~ '_DISTINCT'].values()[0] or 0 }} {# row_distinct #}
+                    , {{ results.columns[column.name ~ '_NULL'].values()[0] or 0 }} {# row_null #}
+                    , {{ results.columns[column.name ~ '_MIN'].values()[0] or 0 }} {# row_min #}
+                    , {{ results.columns[column.name ~ '_MAX'].values()[0] or 0 }} {# row_max #}
+                    , {{ results.columns[column.name ~ '_AVG'].values()[0] or 0 }} {# row_avg #}
+                    , {{ results.columns[column.name ~ '_SUM'].values()[0] or 0 }} {# row_sum #}
+                    , {{ results.columns[column.name ~ '_STDEV'].values()[0] or 0 }} {# row_stdev #}
                     {% else %}
                     , {{ results.columns['row_count'].values()[0] or 0 }} {# row_count #}
                     , {{ results.columns[column.name ~ '_distinct'].values()[0] or 0 }} {# row_distinct #}
