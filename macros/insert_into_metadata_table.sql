@@ -6,13 +6,13 @@
 
 {% macro default__insert_into_metadata_table(database_name, schema_name, table_name, content) -%}
 
-        {% set insert_into_table_query %}
-        insert into {{database_name}}.{{ schema_name }}.{{ table_name }}
-        VALUES
-        {{ content }}
-        {% endset %}
+    {% set insert_into_table_query %}
+    insert into {{database_name}}.{{ schema_name }}.{{ table_name }}
+    VALUES
+    {{ content }}
+    {% endset %}
 
-        {% do run_query(insert_into_table_query) %}
+    {% do run_query(insert_into_table_query) %}
 
 {%- endmacro %}
 
@@ -32,4 +32,15 @@
     {% endset %}
 
     {% do run_query(insert_into_table_query) %}
+{%- endmacro %}
+
+{% macro TBD__insert_into_metadata_table(database_name, schema_name, table_name, content) -%}
+
+    {%- call statement('do_insert', fetch_result=False, auto_begin=True) -%}
+    insert into {{database_name}}.{{ schema_name }}.{{ table_name }}
+    VALUES
+    {{ content }}
+    {%- endcall -%}
+    {{ adapter.commit() }}
+
 {%- endmacro %}
