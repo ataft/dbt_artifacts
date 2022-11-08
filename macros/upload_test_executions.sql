@@ -26,7 +26,8 @@
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(8) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(9) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(10) }},
-            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(11) }}
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(11) }},
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(12) }}
         from values
 
         {% endif %}
@@ -71,7 +72,6 @@
                 null, {# rows_affected not available in Databricks #}
                 {{ 'null' if test.failures is none else test.failures }} {# failures #}
                 , '{{ null if test.node.test_metadata is not defined else test.node.test_metadata.name }}' {# test_meta_name #}
-                , '{{ null if test.node.test_metadata is not defined else tojson(adapter.dispatch('escape_singlequote', 'dbt_artifacts')(test.node.test_metadata.kwargs)) }}' {# test_meta_kwargs #}
             )
             {%- if not loop.last %},{%- endif %}
         {%- endfor %}
@@ -125,7 +125,6 @@
                 null, {# rows_affected not available in Databricks #}
                 {{ 'null' if test.failures is none else test.failures }} {# failures #}
                 , '{{ null if test.node.test_metadata is not defined else test.node.test_metadata.name }}' {# test_meta_name #}
-                , '{{ null if test.node.test_metadata is not defined else tojson(adapter.dispatch('escape_singlequote', 'dbt_artifacts')(test.node.test_metadata.kwargs)) }}' {# test_meta_kwargs #}                
             )
             {%- if not loop.last %},{%- endif %}
 
