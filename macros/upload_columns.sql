@@ -43,6 +43,12 @@
         {% endfor %}
 
         {% for model in new_list -%}
+
+            {% set lowerCols = {} %}
+            {% for k, v in model.columns.items()  %}
+                {% do lowerCols.update({k.lower(): v}) %}
+            {% endfor %}
+
             {% set relation = dbt_artifacts.get_relation( model.name ) %}
             {%- set columns = adapter.get_columns_in_relation(relation) -%}
 
@@ -52,7 +58,6 @@
             select
                 count(1) as row_count
                 {% for column in columns %}
-                {% set col = model.columns.get(column.name) %}
                 , count(distinct {{ column.name }}) as {{ column.name }}_distinct
                 , count(1) - count({{ column.name }}) as {{ column.name }}_null
                 {% if column.is_number() %}
@@ -82,7 +87,7 @@
             {% endif %}
 
             {% for column in columns %}
-                {% set col = model.columns.get(column.name) %}
+                {% set col = lowerCols.get(column.name.lower()) %}
                 (
                     '{{ invocation_id }}' {# command_invocation_id #}
                     , '{{ model.unique_id }}' {# node_id #}
