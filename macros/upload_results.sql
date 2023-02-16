@@ -19,47 +19,15 @@
     {% if execute %}
 
         {% if results != [] %}
-            {% do log("Uploading model executions", true) %}
-            {% set model_executions = dbt_artifacts.get_relation('model_executions') %}
-            {% set content_model_executions = dbt_artifacts.upload_model_executions(results) %}
-            {{ dbt_artifacts.insert_into_metadata_table(
-                database_name=model_executions.database,
-                schema_name=model_executions.schema,
-                table_name=model_executions.identifier,
-                content=content_model_executions
-                )
-            }}
 
-            {% do log("Uploading seed executions", true) %}
-            {% set seed_executions = dbt_artifacts.get_relation('seed_executions') %}
-            {% set content_seed_executions = dbt_artifacts.upload_seed_executions(results) %}
+            {% do log("Uploading all executions", true) %}
+            {% set all_executions = dbt_artifacts.get_relation('all_executions') %}
+            {% set content_all_executions = dbt_artifacts.upload_all_executions(results) %}
             {{ dbt_artifacts.insert_into_metadata_table(
-                database_name=seed_executions.database,
-                schema_name=seed_executions.schema,
-                table_name=seed_executions.identifier,
-                content=content_seed_executions
-                )
-            }}
-
-            {% do log("Uploading snapshot executions", true) %}
-            {% set snapshot_executions = dbt_artifacts.get_relation('snapshot_executions') %}
-            {% set content_snapshot_executions = dbt_artifacts.upload_snapshot_executions(results) %}
-            {{ dbt_artifacts.insert_into_metadata_table(
-                database_name=snapshot_executions.database,
-                schema_name=snapshot_executions.schema,
-                table_name=snapshot_executions.identifier,
-                content=content_snapshot_executions
-                )
-            }}
-
-            {% do log("Uploading test executions", true) %}
-            {% set test_executions = dbt_artifacts.get_relation('test_executions') %}
-            {% set content_test_executions = dbt_artifacts.upload_test_executions(results) %}
-            {{ dbt_artifacts.insert_into_metadata_table(
-                database_name=test_executions.database,
-                schema_name=test_executions.schema,
-                table_name=test_executions.identifier,
-                content=content_test_executions
+                database_name=all_executions.database,
+                schema_name=all_executions.schema,
+                table_name=all_executions.identifier,
+                content=content_all_executions
                 )
             }}
 
