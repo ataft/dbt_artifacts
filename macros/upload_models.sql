@@ -27,12 +27,20 @@
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(10) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(11) }},
             {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(12)) }},
-            {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(13)) }}
+            {{ adapter.dispatch('parse_json', 'dbt_artifacts')(adapter.dispatch('column_identifier', 'dbt_artifacts')(13)) }},
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(14) }}
         from values
 
         {% endif %}
 
         {% for model in models -%}
+
+            {%- set rowcount_query %}
+            select count(*) as model_rowcount from {{ model.schema }}.{{ model.name }}
+            {%- endset -%}
+            {%- set results = run_query(rowcount_query) -%}
+            {%- set model_rowcount = results.columns[0].values()[0] -%}
+
             (
                 '{{ invocation_id }}', {# command_invocation_id #}
                 '{{ model.unique_id }}', {# node_id #}
@@ -46,7 +54,8 @@
                 '{{ model.checksum.checksum }}', {# checksum #}
                 '{{ model.config.materialized }}', {# materialization #}
                 '{{ tojson(model.tags) }}', {# tags #}
-                '{{ tojson(model.config.meta) }}' {# meta #}
+                '{{ tojson(model.config.meta) }}', {# meta #}
+                {{ model_rowcount }} {# total rowcount #}
             )
             {%- if not loop.last %},{%- endif %}
         {%- endfor %}
